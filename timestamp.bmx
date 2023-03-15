@@ -5,34 +5,35 @@
 
 SuperStrict
 
-Module bmx.datetime
+Module bmx.timestamp
 
 Framework pub.stdc		' strftime_(), putenv_%( str$ ), getenv_$( env$ )
 Import brl.blitz		' TRuntimeException
+Import brl.retro
 Import "timestamp.c"
 
 Extern	' timestamp.c
 
 	'	Get size of the tm structure
-	Function c_sizeof_tm:Int() = "c_sizeof_tm"
+	Function c_sizeof_tm:Int()
 	
 	'	Get a field from the tm structure
-	Function c_tm_field:Int( tm:Byte Ptr, fld:Int ) = "c_tm_field"
+	Function c_tm_field:Int( tm:Byte Ptr, fld:Int )
 	
 	'	Expose native C functions
-	Function c_gmtime( time_t:Long Var, tm:Byte Ptr ) = "c_gmtime"
-	Function c_mktime:Long( tm:Byte Ptr ) = "c_mktime"
-	Function c_strptime( buf:Byte Ptr, format:String, tm:Byte Ptr ) = "c_strptime"
+	Function c_gmtime( time_t:Long Var, tm:Byte Ptr )
+	Function c_mktime:Long( tm:Byte Ptr )
+	Function c_strptime( buf:Byte Ptr, format:String, tm:Byte Ptr )
 
 	' strftime() already exposed as strftime_()
 	' time() already exposed as time_()
 
 	'	Additional support
-	Function c_getDate( tm:Byte Ptr, year:Int Var, month:Int Var, day:Int Var ) = "c_getdate"
-	Function c_getTime( tm:Byte Ptr, hour:Int Var, minute:Int Var, second:Int Var ) = "c_gettime"
-	Function c_setDatetime( tm:Byte Ptr, year:Int, month:Int, day:Int, hour:Int, minute:Int, second:Int ) = "c_setdatetime"
-	Function c_setDate( tm:Byte Ptr, year:Int, month:Int, day:Int ) = "c_setdate"
-	Function c_setTime( tm:Byte Ptr, hour:Int, minute:Int, second:Int ) = "c_settime"
+	Function c_getdate( tm:Byte Ptr, year:Int Var, month:Int Var, day:Int Var )
+	Function c_gettime( tm:Byte Ptr, hour:Int Var, minute:Int Var, second:Int Var )
+	Function c_setdatetime( tm:Byte Ptr, year:Int, month:Int, day:Int, hour:Int, minute:Int, second:Int )
+	Function c_setdate( tm:Byte Ptr, year:Int, month:Int, day:Int )
+	Function c_settime( tm:Byte Ptr, hour:Int, minute:Int, second:Int )
 	
 End Extern
 
@@ -53,16 +54,14 @@ Const MYSQL_YEAR:String          = "%Y"
 ' Microsoft SQL Server Date Datatypes
 Const MSSQL_DATE:String          = DT_DATE
 Const MSSQL_DATETIME:String      = DT_DATETIME
-Const MSSQL_TIMESTAMP:String     = "%"			' Custom support, see DateTime.Format()
+Const MSSQL_TIMESTAMP:String     = "%s"
 Const MSSQL_SMALLDATETIME:String = DT_DATETIME
 
 ' Durations used in differences
-Const DT_SECONDS:Int = 1
-Const DT_MINUTES:Int = DT_SECONDS*60
-Const DT_HOURS:Int   = DT_MINUTES*60
-Const DT_DAYS:Int    = DT_HOURS*24
-'Const DT_MONTHS:Int  = 0	' Needs some special calculations
-'Const DT_YEARS:Int   = 0	' Needs some special calculations
+Const DT_SECONDS:Int             = 1
+Const DT_MINUTES:Int             = DT_SECONDS*60
+Const DT_HOURS:Int               = DT_MINUTES*60
+Const DT_DAYS:Int                = DT_HOURS*24
 
 ' Get current Timestamp ( Functionally the same as DateTime.now() )
 Function Timestamp:Long()
@@ -123,8 +122,6 @@ Struct CTime
 	End Method
 
 	Method format:String( dateformat:String=DT_DATETIME )
-		' Special support for MYSQL TIMESTAMP which should be a UNIXTIME number!
-		If dateformat=MSSQL_TIMESTAMP Then Return String( timestamp() )
 		Local buff:Byte[256]
 		strftime_( buff, 256, dateformat, Varptr tm )
 		Return String.FromCString(buff)
@@ -138,13 +135,13 @@ Struct CTime
 		Return format( ["%B","%b"][shortname] )
 	End Method	
 	
-	Method diff:Double( future:CTime, interval:Long = DT_SECONDS )
+	Method diff:Int( future:CTime, interval:Int = DT_SECONDS )
 		Local ts_now:Long = c_mktime( tm )
 		Local ts_future:Long = c_mktime( future.tm )
 		Return (ts_future-ts_now)/interval
 	End Method
 
-	Method diff:Double( ts_future:Long, interval:Long = DT_SECONDS )
+	Method diff:Int( ts_future:Long, interval:Int = DT_SECONDS )
 		Local ts_now:Long = c_mktime( tm )
 		Return (ts_future-ts_now)/interval
 	End Method
@@ -160,7 +157,7 @@ Struct CTime
 	End Method
 	
 	Method operator[]:Int( fld:String )
-		Select Lower(fld)
+		Select fld.tolower()
 		Case "year","yr"; Return year()
 		Case "month","mon"; Return month()
 		Case "day"; Return day()
@@ -183,7 +180,7 @@ Struct CTime
 		Return time_t
 	End Function
 	
-	Function interval:Long( quantity:Int, interval:Int=DT_SECONDS )
+	Function interval:Int( quantity:Int, interval:Int=DT_SECONDS )
 		Return quantity*interval
 	End Function
 	

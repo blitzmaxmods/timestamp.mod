@@ -1,5 +1,5 @@
 # Blitzmax Timestamp Module
-VERSION 0.2 - BETA
+VERSION 0.30 - BETA
 
 *timestamp.mod* is a module for [BlitzMaxMG](https://Blitzmax.org) that provides a set of functions for dealing with Unix Timestamps and dates
 
@@ -38,8 +38,8 @@ A helper Function called Timestamp() is also available.
 
 # API Reference
 
-* Function Timestamp()
-* Struct [DateTime](docs/DateTime.md)
+* Function [Timestamp()](docs/function_timestamp.md)
+* Struct [Ctime](docs/Ctime.md)
 
 # CHANGE LOG
 
@@ -47,4 +47,5 @@ A helper Function called Timestamp() is also available.
 * 09 MAR 2023  V0.01  Draft
 * 10 MAR 2023  V0.10  Beta   Fixed issue in tm structure giving stack and segmentation faults.
 * 14 MAR 2023  V0.20  Beta   Changed to the internal structure to encapsulate the C struct tm
+* 15 MAR 2023  V0.30  Beta   Fixed Int/Long issue, compiled into a module.
 

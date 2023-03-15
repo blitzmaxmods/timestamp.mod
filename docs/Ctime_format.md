@@ -51,25 +51,25 @@ See also:
 | %j | Day of the year (1-366) | 123 |
 | %m | Month (Zero-padded) (01-12) | 06 |
 | %M | Minute (Zero-padded) (00-59)	52
-| %n | Newline | ('\n') |	
+| %n | Newline | "\n" |	
 | %p | Morning AM or Afternoon PM | PM |
 | %r | Full 12-hour time (HH:MM:SS | 01:23:45 PM |
 | %R | 24-hour time (HH:MM) | 12:30 |
 | %S | Seconds (Zero-padded) (00-61) | 01 |
-| %s	Unix time; the number of seconds since the Unix epoch.	1455803239
-| %t	Horizontal-tab character ('\t')	
-| %T	ISO 8601 time format (HH:MM:SS), equivalent to %H:%M:%S	18:25:34
-| %u	ISO 8601 weekday as number with Monday as 1 (1-7)	6
-| %U	Week number with the first Sunday as the first day of week one (00-53)	30
-| %V	ISO 8601 week number (00-53)	12
-| %w	Weekday as a decimal number with Sunday as 0 (0-6)	5
-| %W	Week number with the first Monday as the first day of week one (00-53)	50
-| %x	National date representation	05/28/11
-| %X	National time representation	12:22:02
-| %y	Year, last two digits (00-99)	11
-| %Y	Year	2016
-| %z	The time zone offset from UTC; a leading plus sign stands for east of UTC, a minus sign for west of UTC, hours and minutes follow with two digits each and no delimiter between them. If timezone cannot be determined, no characters.	+0100
-| %Z	Timezone name or abbreviation; if timezone cannot be determined, no characters	CEST
+| %s | Unix timestamp | 1678898701 |
+| %t | Tab | "\t" |	
+| %T | ISO 8601 format (HH:MM:SS) | 15:45:22 |
+| %u | ISO 8601 weekday (1-7) | 2 |
+| %U | Week number (Sunday bias) (00-53) | 50 |
+| %V | ISO 8601 week number (00-53) | 50 |
+| %w | Weekday (Sunday bias) (0-6) | 4 |
+| %W | Week number (Monday bias) (00-53) | 50 |
+| %x | National date ||
+| %X | National time ||
+| %y | Year (Two digit) (00-99) | 43 |
+| %Y | Year	(Four digit) | 1943 |
+| %z | Time zone relative to UTC ||
+| %Z | Timezone name ||
 
 ## Return Value
 Ctime.format() returns a date formatted string
@@ -84,7 +84,9 @@ Has not been evaluated, but all the C functions used have been confirmed
 ```
 Import bmx.timestamp
 
-Local time:Long = Ctime.time()
+Local time:Ctime = new Ctime()
+Print time.format()
+
 ```
 
 ## Further Reading

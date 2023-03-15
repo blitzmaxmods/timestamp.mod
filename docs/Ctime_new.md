@@ -1,16 +1,20 @@
-# Ctime.time()
+# Ctime.new()
 
 ## Syntax
-```Ctime.time:Long()``` 
+```
+Ctime.new()
+Ctime.new( dt:String, dateformat:String=DT_DATETIME )
+Ctime.new( year:Int, month:Int, day:Int, hour:Int=0, minute:Int=0, second:Int=0 )
+``` 
 
 ## Description
 
-Ctime.time() is a static function of the Struct [Ctime](Ctime.md) and returns the number of seconds since the Unix Epoch (1 Jan 1970). It is commonly refererred to as UnixTime or a Unix Timestamp.
+Ctime.new() is a constructor of Struct [Ctime](Ctime.md)
 
-See also [Timestamp()](function_timestamp.md)
+Pelase refer to [Ctime.Format()](Ctime_format.md) for information regarding 'dateformat' argument.
 
 ## Return Value
-Ctime.time() returns a signed Long
+Ctime.new() returns a new Ctime struct
 
 ## Dependencies
 * [BlitzMaxNG](https://blitzmax.org)
@@ -22,7 +26,9 @@ Has not been evaluated, but all the C functions used have been confirmed
 ```
 Import bmx.timestamp
 
-Local time:Long = Ctime.time()
+Local now = New Ctime()
+Local xmas = New (now.year(), 12, 25 ) 
+Local xmas66 = New Ctime( "1966-12-25", DT_DATE )
 ```
 
 ## Further Reading
